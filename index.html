@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muh. Agustyon — Profil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black: #0a0808;
+    --black-2: #131010;
+    --black-3: #1c1616;
+    --red: #e0242f;
+    --red-dim: #7a1015;
+    --red-glow: #ff3b44;
+    --bone: #f2ece6;
+    --bone-dim: #a89c94;
+    --line: #2a2020;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--bone);
+    font-family:'Space Grotesk',sans-serif;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--red);color:var(--black);}
+
+  /* scanline / grain texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+    pointer-events:none;
+    z-index:200;
+  }
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--red);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;height:1px;
+    background:var(--red);
+    display:inline-block;
+  }
+
+  h1,h2,h3{
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.02em;
+    line-height:0.95;
+  }
+
+  section{
+    padding:110px 8vw;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+
+  /* ===== NAV ===== */
+  nav{
+    position:fixed; top:0; left:0; right:0;
+    z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 8vw;
+    background:linear-gradient(180deg, rgba(10,8,8,0.95), rgba(10,8,8,0));
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;
+    letter-spacing:0.1em;
+  }
+  nav .logo{
+    color:var(--bone);
+    font-family:'Bebas Neue',sans-serif;
+    font-size:1.3rem;
+    letter-spacing:0.08em;
+  }
+  nav .logo span{color:var(--red);}
+  nav ul{list-style:none;display:flex;gap:26px;}
+  nav a{color:var(--bone-dim);text-decoration:none;transition:color .25s;white-space:nowrap;}
+  nav a:hover{color:var(--red-glow);}
+
+  .mobile-nav{
+    display:none;
+    position:fixed;
+    bottom:0; left:0; right:0;
+    z-index:100;
+    background:rgba(10,8,8,0.96);
+    border-top:1px solid var(--line);
+    backdrop-filter:blur(6px);
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .mobile-nav ul{
+    list-style:none;
+    display:flex;
+    gap:22px;
+    padding:14px 6vw;
+    width:max-content;
+  }
+  .mobile-nav a{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.08em;
+    color:var(--bone-dim);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .mobile-nav a:active{color:var(--red-glow);}
+
+  /* ===== HERO ===== */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:140px;
+    position:relative;
+  }
+  .hero-bg-text{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    font-family:'Bebas Neue',sans-serif;
+    font-size:min(28vw,340px);
+    color:transparent;
+    -webkit-text-stroke:1px var(--line);
+    white-space:nowrap;
+    z-index:0;
+    user-select:none;
+    letter-spacing:0.02em;
+  }
+  .hero-content{position:relative;z-index:1;}
+  .hero .eyebrow{margin-bottom:22px;}
+  .hero h1{
+    font-size:clamp(3.2rem,9vw,8rem);
+    color:var(--bone);
+  }
+  .hero h1 .red{color:var(--red);}
+  .hero .role{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--bone-dim);
+    font-size:1rem;
+    margin-top:18px;
+    max-width:560px;
+  }
+  .hero .tag-row{
+    margin-top:40px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .tag{
+    border:1px solid var(--line);
+    padding:8px 16px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    color:var(--bone-dim);
+    border-radius:2px;
+  }
+  .scroll-cue{
+    position:absolute;
+    bottom:40px; left:8vw;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem;
+    color:var(--bone-dim);
+    letter-spacing:0.15em;
+    display:flex;align-items:center;gap:10px;
+  }
+  .scroll-cue .bar{
+    width:1px;height:34px;
+    background:linear-gradient(var(--red),transparent);
+    animation:scrolldown 1.8s infinite;
+  }
+  @keyframes scrolldown{
+    0%{transform:scaleY(0);transform-origin:top;}
+    50%{transform:scaleY(1);transform-origin:top;}
+    50.01%{transform-origin:bottom;}
+    100%{transform:scaleY(0);transform-origin:bottom;}
+  }
+
+  /* ===== BIODATA ===== */
+  .bio-grid{
+    display:grid;
+    grid-template-columns:1fr 1.3fr;
+    gap:60px;
+    margin-top:50px;
+  }
+  .bio-title{font-size:clamp(2.4rem,5vw,4rem);margin-top:10px;}
+  .bio-title .red{color:var(--red);}
+  .id-card{
+    border:1px solid var(--line);
+    background:var(--black-2);
+    padding:0;
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .id-card-head{
+    background:var(--red);
+    color:var(--black);
+    padding:14px 22px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.15em;
+    display:flex;
+    justify-content:space-between;
+  }
+  .id-row{
+    display:grid;
+    grid-template-columns:140px 1fr;
+    padding:18px 22px;
+    border-bottom:1px solid var(--line);
+    gap:16px;
+  }
+  .id-row:last-child{border-bottom:none;}
+  .id-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--red);
+    align-self:start;
+    padding-top:2px;
+  }
+  .id-value{font-size:1.02rem;color:var(--bone);}
+
+  /* ===== PKL ===== */
+  .pkl-wrap{
+    margin-top:50px;
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:70px;
+    align-items:center;
+  }
+  .pkl-num{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(6rem,14vw,11rem);
+    color:transparent;
+    -webkit-text-stroke:1.5px var(--red-dim);
+    line-height:0.8;
+  }
+  .pkl-text p{
+    color:var(--bone-dim);
+    font-size:1.05rem;
+    line-height:1.8;
+    margin-bottom:18px;
+  }
+  .pkl-text strong{color:var(--bone);font-weight:600;}
+  .pkl-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid var(--red-dim);
+    padding:10px 18px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    color:var(--red-glow);
+    margin-top:10px;
+    border-radius:2px;
+  }
+  .pkl-badge::before{content:"●";font-size:0.6rem;}
+
+  /* ===== ROSTER (istri & kembaran) shared card grid ===== */
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:46px;}
+  .section-head h2{font-size:clamp(2.4rem,5vw,4rem);}
+  .section-head .count{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--bone-dim);
+    font-size:0.85rem;
+  }
+  .section-head .count b{color:var(--red);font-size:1.1rem;}
+
+  .roster-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .roster-card{
+    background:var(--black-2);
+    padding:26px 18px;
+    position:relative;
+    transition:background .25s;
+    min-height:150px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .roster-card:hover{background:var(--black-3);}
+  .roster-idx{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem;
+    color:var(--red);
+    letter-spacing:0.1em;
+  }
+  .roster-name{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:1.5rem;
+    color:var(--bone);
+    margin-top:20px;
+    letter-spacing:0.01em;
+  }
+  .roster-role{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem;
+    color:var(--bone-dim);
+    margin-top:6px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+
+  #twins .roster-grid{grid-template-columns:repeat(4,1fr);}
+
+  /* ===== ACHIEVEMENTS ===== */
+  .ach-list{margin-top:50px;}
+  .ach-item{
+    display:grid;
+    grid-template-columns:70px 1fr auto;
+    gap:24px;
+    align-items:center;
+    padding:26px 0;
+    border-bottom:1px solid var(--line);
+    transition:padding-left .3s;
+  }
+  .ach-item:hover{padding-left:14px;border-bottom-color:var(--red-dim);}
+  .ach-item:first-child{border-top:1px solid var(--line);}
+  .ach-rank{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:2.6rem;
+    color:transparent;
+    -webkit-text-stroke:1px var(--red);
+  }
+  .ach-body h3{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:1.15rem;
+    color:var(--bone);
+    line-height:1.4;
+    letter-spacing:0;
+  }
+  .ach-year{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;
+    color:var(--bone-dim);
+    white-space:nowrap;
+  }
+  .ach-item.more .ach-body h3{color:var(--red-glow);}
+
+  /* ===== FOOTER ===== */
+  footer{
+    padding:60px 8vw 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.75rem;
+    color:var(--bone-dim);
+  }
+  footer .red{color:var(--red);}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.show{opacity:1;transform:translateY(0);}
+
+  @media (max-width:900px){
+    .bio-grid, .pkl-wrap{grid-template-columns:1fr;}
+    .roster-grid{grid-template-columns:repeat(2,1fr);}
+    #twins .roster-grid{grid-template-columns:repeat(2,1fr);}
+    .id-row{grid-template-columns:110px 1fr;}
+    nav ul{display:none;}
+    section{padding:80px 6vw;}
+  }
+
+  @media (max-width:640px){
+    nav{padding:16px 6vw;}
+    nav .logo{font-size:1.1rem;}
+
+    .hero{padding-top:110px;min-height:92vh;}
+    .hero-bg-text{font-size:22vw;-webkit-text-stroke:0.6px var(--line);}
+    .hero h1{font-size:14vw;}
+    .hero .role{font-size:0.9rem;max-width:100%;}
+    .tag{font-size:0.62rem;padding:7px 12px;}
+    .scroll-cue{left:6vw;bottom:24px;font-size:0.62rem;}
+
+    section{padding:64px 6vw;border-bottom-width:1px;}
+    .eyebrow{font-size:0.64rem;}
+    h2{font-size:2.2rem !important;}
+
+    /* biodata */
+    .bio-grid{gap:30px;margin-top:34px;}
+    .id-row{grid-template-columns:1fr;gap:4px;padding:14px 16px;}
+    .id-label{padding-top:0;}
+    .id-value{font-size:0.92rem;word-break:break-word;}
+    .id-card-head{padding:12px 16px;font-size:0.64rem;}
+
+    /* pkl */
+    .pkl-wrap{gap:26px;margin-top:34px;}
+    .pkl-num{font-size:22vw;-webkit-text-stroke:1px var(--red-dim);}
+    .pkl-text h2{font-size:1.7rem !important;margin-bottom:14px;}
+    .pkl-text p{font-size:0.92rem;line-height:1.7;}
+    .pkl-badge{font-size:0.64rem;padding:8px 14px;flex-wrap:wrap;}
+
+    /* roster grids: single column on small phones */
+    .roster-grid, #twins .roster-grid{grid-template-columns:repeat(2,1fr);}
+    .roster-card{padding:18px 14px;min-height:120px;}
+    .roster-name{font-size:1.2rem;margin-top:14px;}
+    .roster-role{font-size:0.6rem;}
+    .roster-idx{font-size:0.62rem;}
+
+    .section-head{margin-bottom:28px;gap:10px;}
+    .section-head .count{font-size:0.75rem;}
+
+    /* achievements: stack rank/body/year */
+    .ach-item{
+      grid-template-columns:44px 1fr;
+      row-gap:6px;
+      padding:20px 0;
+    }
+    .ach-rank{font-size:1.8rem;}
+    .ach-body h3{font-size:0.95rem;line-height:1.45;}
+    .ach-year{
+      grid-column:2;
+      font-size:0.68rem;
+    }
+
+    footer{padding:44px 6vw 30px 6vw;margin-bottom:56px;font-size:0.68rem;flex-direction:column;align-items:flex-start;}
+
+    .mobile-nav{display:block;}
+  }
+
+  @media (max-width:400px){
+    .roster-grid, #twins .roster-grid{grid-template-columns:1fr;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">M<span>.</span>A<span>.</span></div>
+  <ul>
+    <li><a href="#bio">Biodata</a></li>
+    <li><a href="#pkl">PKL</a></li>
+    <li><a href="#wives">Daftar Istri</a></li>
+    <li><a href="#twins">Kembaran</a></li>
+    <li><a href="#achievements">Pencapaian</a></li>
+  </ul>
+</nav>
+
+<div class="mobile-nav">
+  <ul>
+    <li><a href="#top">Home</a></li>
+    <li><a href="#bio">Biodata</a></li>
+    <li><a href="#pkl">PKL</a></li>
+    <li><a href="#wives">Istri</a></li>
+    <li><a href="#twins">Kembaran</a></li>
+    <li><a href="#achievements">Pencapaian</a></li>
+  </ul>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg-text">AGUSTYON</div>
+  <div class="hero-content">
+    <div class="eyebrow">Profil Personal · Samarinda</div>
+    <h1>MUH. <span class="red">AGUSTYON</span></h1>
+    <p class="role">Siswa SMKN 2 PPU · Lahir di Lambe Kayu, 03 Agustus 2008 · Pernah PKL di Rumah Sakit Pertamina Panorama Balikpapan.</p>
+    <div class="tag-row">
+      <div class="tag">CLOUD COMPUTING</div>
+      <div class="tag">JUARA LKS 2× BERTURUT</div>
+      <div class="tag">MEDALI PERAK OSN MTK 2025</div>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="bar"></div>SCROLL</div>
+</section>
+
+<!-- BIODATA -->
+<section id="bio">
+  <div class="eyebrow reveal">01 · Data Diri</div>
+  <h2 class="bio-title reveal">Siapa <span class="red">Dia</span>.</h2>
+  <div class="bio-grid">
+    <div class="reveal">
+      <p style="color:var(--bone-dim);line-height:1.8;font-size:1.05rem;">
+        Anak Samarinda Utara yang sekolah di SMKN 2 PPU. Lahir Agustus, jadi bulan lahirnya sama persis dengan nama depannya — kebetulan yang cukup rapi.
+      </p>
+    </div>
+    <div class="id-card reveal">
+      <div class="id-card-head"><span>KARTU IDENTITAS</span><span>NO. 001</span></div>
+      <div class="id-row"><div class="id-label">Nama</div><div class="id-value">Muh. Agustyon</div></div>
+      <div class="id-row"><div class="id-label">TTL</div><div class="id-value">Lambe Kayu, 03 Agustus 2008</div></div>
+      <div class="id-row"><div class="id-label">Sekolah</div><div class="id-value">SMKN 2 PPU</div></div>
+      <div class="id-row"><div class="id-label">Alamat</div><div class="id-value">Gg. Barito No.1, Sempaja Sel., Kec. Samarinda Utara, Kota Samarinda, Kalimantan Timur 75119</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PKL -->
+<section id="pkl">
+  <div class="eyebrow reveal">02 · Praktik Kerja Lapangan</div>
+  <div class="pkl-wrap">
+    <div class="pkl-num reveal">PKL</div>
+    <div class="pkl-text reveal">
+      <h2 style="font-size:clamp(2rem,4vw,3rem);margin-bottom:20px;">Rumah Sakit Pertamina <span class="red">Panorama</span> Balikpapan</h2>
+      <p>Dulu Agustyon menjalani Praktik Kerja Lapangan (PKL) di <strong>Rumah Sakit Pertamina Panorama Balikpapan</strong>, salah satu rumah sakit negeri besar di Kalimantan Timur.</p>
+      <p>Di sana ia belajar langsung menerapkan ilmu IT-nya — mulai dari dunia jaringan hingga sistem komputer — di lingkungan kerja nyata rumah sakit, sekaligus mengasah kedisiplinan dan tanggung jawab kerja.</p>
+      <div class="pkl-badge">RS PERTAMINA PANORAMA · BALIKPAPAN</div>
+    </div>
+  </div>
+</section>
+
+<!-- WIVES -->
+<section id="wives">
+  <div class="section-head reveal">
+    <div>
+      <div class="eyebrow">03 · Daftar Istri (Bias List)</div>
+      <h2 style="margin-top:14px;">Para <span class="red" style="color:var(--red);">Istri</span>.</h2>
+    </div>
+    <div class="count">Total <b>10</b> orang</div>
+  </div>
+  <div class="roster-grid reveal" id="wives-grid"></div>
+</section>
+
+<!-- TWINS -->
+<section id="twins">
+  <div class="section-head reveal">
+    <div>
+      <div class="eyebrow">04 · Daftar Kembaran</div>
+      <h2 style="margin-top:14px;">Katanya <span class="red">Mirip</span>.</h2>
+    </div>
+    <div class="count">Total <b>12</b> orang</div>
+  </div>
+  <div class="roster-grid reveal" id="twins-grid"></div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-head reveal">
+    <div>
+      <div class="eyebrow">05 · Pencapaian</div>
+      <h2 style="margin-top:14px;">Rekam <span class="red">Jejak</span>.</h2>
+    </div>
+    <div class="count">Total <b>8+</b> pencapaian</div>
+  </div>
+  <div class="ach-list reveal" id="ach-list"></div>
+</section>
+
+<footer>
+  <div>© 2026 Muh. Agustyon — <span class="red">Samarinda, Kalimantan Timur</span></div>
+  <div>Dibuat dengan Claude</div>
+</footer>
+
+<script>
+  // ---- data ----
+  const wives = [
+    "Juun","Tzuyu","Kazuha","Wonhee","Ahyeon","Rei","Karina","Winter","Carmen","Giselle"
+  ];
+  const twins = [
+    ["Jungkook","BTS"],["Soobin","TXT"],["Juhoon","Cortis"],["Jihoon","Wanna One"],
+    ["Jihoon","TWS"],["Jihoon","Treasure"],["Jeongin","Stray Kids"],["Jaehyun","BND"],
+    ["Woojin","Longshot"],["Jaemin","NCT"],["Evan","Soloist"],["Jake","Aespa"]
+  ];
+  const achievements = [
+    "Juara 1 LKS SMK Cloud Computing tingkat kabupaten 2026",
+    "Juara 1 LKS SMK Cloud Computing tingkat kabupaten 2025",
+    "Juara Harapan 1 LKS SMK Cloud Computing tingkat provinsi 2025",
+    "Peraih medali perak OSN Matematika 2025",
+    "Pernah mencapai rank Immortal",
+    "Hafal Juz 30",
+    "Pernah mencetak 5 juta damage dalam satu hit di Genshin Impact",
+    "...dan masih banyak lagi pencapaian lainnya"
+  ];
+  const years = ["2026","2025","2025","2025","","","",""];
+
+  const wivesGrid = document.getElementById('wives-grid');
+  wives.forEach((name,i)=>{
+    const card = document.createElement('div');
+    card.className = 'roster-card';
+    card.innerHTML = `<div class="roster-idx">${String(i+1).padStart(2,'0')}</div>
+      <div><div class="roster-name">${name}</div><div class="roster-role">Istri No. ${i+1}</div></div>`;
+    wivesGrid.appendChild(card);
+  });
+
+  const twinsGrid = document.getElementById('twins-grid');
+  twins.forEach((t,i)=>{
+    const card = document.createElement('div');
+    card.className = 'roster-card';
+    card.innerHTML = `<div class="roster-idx">${String(i+1).padStart(2,'0')}</div>
+      <div><div class="roster-name">${t[0]}</div><div class="roster-role">${t[1]}</div></div>`;
+    twinsGrid.appendChild(card);
+  });
+
+  const achList = document.getElementById('ach-list');
+  achievements.forEach((a,i)=>{
+    const item = document.createElement('div');
+    item.className = 'ach-item' + (i===achievements.length-1 ? ' more' : '');
+    item.innerHTML = `<div class="ach-rank">${String(i+1).padStart(2,'0')}</div>
+      <div class="ach-body"><h3>${a}</h3></div>
+      <div class="ach-year">${years[i]}</div>`;
+    achList.appendChild(item);
+  });
+
+  // reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); }
+    });
+  },{threshold:0.12});
+  revealEls.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
